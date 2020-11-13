@@ -1,0 +1,12 @@
+test user
+username: beep_boop
+password: boopbeep
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImJlZXBfYm9vcCIsImlhdCI6MTYwNDk3NzY4OH0.UtwtOZEjzCsGe1X3B4JYx3pYX2H0csH-5V_2YhbtYQ8
+
+curl -i \
+     -H "Content-Type: application/json" \
+     -X POST \
+     -d '{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImJlZXBfYm9vcCIsImlhdCI6MTYwNDk3NzY4OH0.UtwtOZEjzCsGe1X3B4JYx3pYX2H0csH-5V_2YhbtYQ8", "story": {"author":"Beep Boop","title":"How to Be a Better Robot", "url": "https://google.com"} }' \
+      https://hack-or-snooze-v3.herokuapp.com/stories
+
+new story id: f91a65ab-4818-4237-a784-1dc1ca5a42df
