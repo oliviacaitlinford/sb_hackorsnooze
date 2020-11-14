@@ -73,6 +73,21 @@ class User {
     this.ownStories = [];
   }
 
+  static async addFavorite(token, username, storyId) {
+    const response = await axios.post(`${BASE_URL}/users/${username}/favorites/${storyId}`, {
+      'token': {
+        token
+      }
+    });
+
+    if (this.favorites.includes(storyId)) {
+      return;
+    }
+    else {
+      this.favorites.push(storyId);
+    }
+  }
+
   /* Create and return a new user.
    *
    * Makes POST request to API and returns newly-created user.

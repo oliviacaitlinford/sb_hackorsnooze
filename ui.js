@@ -9,7 +9,6 @@ $(async function() {
   const $navLogin = $("#nav-login");
   const $navLogOut = $("#nav-logout");
   const $navSubmit = $("#nav-submit");
-  const $favButton = $(".far fa-heart");
 
   // global storyList variable
   let storyList = null;
@@ -237,9 +236,17 @@ $(async function() {
    * Event Handler for Clicking Favorite Button/Heart
    */
 
-  $favButton.on("click", function(evt) {
-    console.log(evt);
+  $allStoriesList.on("click", ".fa-heart", async function(evt) {
+    // declare variables for target button clicked, story id, and current user
+    let $favButton = $(evt.target);
+    let storyId = $favButton.parent().attr("id");
+    let username = currentUser.username;
+    let userToken = currentUser.loginToken;
+
+    // toggle class of favorite button (solid or regular, favorite or unfavorite)
     $favButton.toggleClass("far fas");
+
+    await User.addFavorite(userToken, username, storyId);
   });
 
   /* hide all elements in elementsArr */
