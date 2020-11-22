@@ -107,6 +107,7 @@ $(async function() {
     await generateStories();
 
     if (currentUser) {
+      console.log(currentUser)
       showNavForLoggedInUser();
     }
   }
@@ -185,9 +186,6 @@ $(async function() {
 
     // show the updated stories
     $allStoriesList.show();
-
-    // update the navigation bar
-    // showNavForLoggedInUser();
   }
 
   /**
@@ -240,13 +238,17 @@ $(async function() {
     // declare variables for target button clicked, story id, and current user
     let $favButton = $(evt.target);
     let storyId = $favButton.parent().attr("id");
-    let username = currentUser.username;
     let userToken = currentUser.loginToken;
 
     // toggle class of favorite button (solid or regular, favorite or unfavorite)
     $favButton.toggleClass("far fas");
 
-    await User.addFavorite(userToken, username, storyId);
+    if ($favButton.hasClass("far")) {
+      await currentUser.addFavorite(userToken, storyId);
+    }
+    else if ($favButton.hasClass("fas")) {
+      await currentUser.removeFavorite(userToken, storyId);
+    }
   });
 
   /* hide all elements in elementsArr */
@@ -264,6 +266,16 @@ $(async function() {
   }
 
   function showNavForLoggedInUser() {
+    const $name = $("#profile-name");
+    const $username = $("#profile-username");
+    const $creationDate = $("#profile-account-date");
+    const name = localStorage.getItem("name");
+    const creationDate = localStorage.getItem("creationDate");
+
+    $name.html(`<b>Name:</b> ${name}`);
+    $username.html(`<b>Username:</b> ${currentUser.username}`);
+    $creationDate.html(`<b>Account Created:</b> ${creationDate.slice(0, 10)}`);
+    
     $navLogin.hide();
     $navLogOut.show();
     $navSubmit.show();
@@ -290,6 +302,8 @@ $(async function() {
     if (currentUser) {
       localStorage.setItem("token", currentUser.loginToken);
       localStorage.setItem("username", currentUser.username);
+      localStorage.setItem("creationDate", currentUser.createdAt);
+      localStorage.setItem("name", currentUser.name);
     }
   }
 });

@@ -73,21 +73,6 @@ class User {
     this.ownStories = [];
   }
 
-  static async addFavorite(token, username, storyId) {
-    const response = await axios.post(`${BASE_URL}/users/${username}/favorites/${storyId}`, {
-      'token': {
-        token
-      }
-    });
-
-    if (this.favorites.includes(storyId)) {
-      return;
-    }
-    else {
-      this.favorites.push(storyId);
-    }
-  }
-
   /* Create and return a new user.
    *
    * Makes POST request to API and returns newly-created user.
@@ -169,6 +154,34 @@ class User {
     existingUser.favorites = response.data.user.favorites.map(s => new Story(s));
     existingUser.ownStories = response.data.user.stories.map(s => new Story(s));
     return existingUser;
+  }
+
+  // The following three methods are called on the user instance.
+
+    /** Add or remove favorite story for current user.
+   *
+   * This function uses the token, target story ID, and a passed in method to make an API request to add or remove
+   * a story from the user's list of favorites.
+   * (methods: "POST" to add, "DELETE" to remove)
+   */
+  async toggleFavorite(token, storyId, method) {
+    await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${storyId}`,
+      method: method,
+      data: {token: token}
+    });
+  }
+
+    /** Calls the toggleFavorite method to add story to user's favorites.
+   */
+  async addFavorite(token, storyId) {
+    return this.toggleFavorite(token, storyId, "POST")
+  }
+
+    /** Calls the toggleFavorite method to remove story from user's favorites.
+   */
+  async removeFavorite(token, storyId) {
+    return this.toggleFavorite(token, storyId, "DELETE")
   }
 }
 
